@@ -1,0 +1,91 @@
+[
+  {
+    "id": 1,
+    "name": "Nike Air Max",
+    "price": 84.99,
+    "description": "This modern take on the classic Air Max 1 has a sleek build and lightweight construction.",
+    "image":
+      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&q=80&w=1450&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 2,
+    "name": "Steve Madden Wafer Suede Heels",
+    "price": 99.95,
+    "description": "This sky-high stiletto heel sandal features a minimalist, strappy silhouette that gives both jeans and dresses a sleek appeal.",
+    "image":
+      "https://www.stevemadden.com/cdn/shop/products/STEVEMADDEN-SHOES_WAFER_BLACK-SUEDE_grande.jpg?v=1622047698"
+  },
+  {
+    "id": 3,
+    "name": "Converse Chuck Taylor All Star High Top",
+    "price": 65.00,
+    "description": "A simple design, a timeless silhouette, an unmistakable ankle patch, front lace-up fastening and flat rubber sole.",
+    "image":
+      "https://images.urbndata.com/is/image/UrbanOutfitters/40806622_220_g?$xlarge$&fit=constrain&qlt=80&wid=640"
+  },
+  {
+    "id": 4,
+    "name": "Reebok Club C Revenge",
+    "price": 90.00,
+    "description": "Shoes that match every challenge. The double outsole adds some height, and the leather upper keeps your look classic.",
+    "image":
+      "https://cdn-images.farfetch-contents.com/15/21/75/57/15217557_26444510_600.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Nike Air Forces",
+    "price": 115.00,
+    "description": "An elegantly shaped and lifted midsole. The leather on the upper breaks in easily and ages to soft perfection while the sculpted collar and pillowy heel keep it comfy.",
+    "image":
+      "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png"
+  },
+  {
+    "id": 6,
+    "name": "New Balance 550",
+    "price": 110.00,
+    "description": "This streamlined silhouette offers a clean take on the heavy-duty designs of the late ‘80s. The leather, synthetic, and mesh upper construction is a classic look in any era.",
+    "image": "https://i.ebayimg.com/images/g/AbUAAOSwXlpjRB4~/s-l640.png"
+  },
+  {
+    "id": 7,
+    "name": "Converse Chuck Taylor Run Star Hike Platform",
+    "price": 164.99,
+    "description": "A chunky platform and jagged rubber sole. A molded platform, two-tone outsole and rounded heel give off futuristic vibes.",
+    "image":"https://di2ponv0v5otw.cloudfront.net/posts/2023/06/27/649b90e124237ade3dd4ed3f/m_649b90f2bd66cd5c0ba4f4b2.jpg"
+  },
+  {
+    "id":8,
+    "name": "Steve Madden Leopold Chelsea Boots",
+    "price": 81.99,
+    "description": "A lug sole updates a timeless Chelsea boot that will take you from the office to happy hour with casual-cool style. With a 1-1/2 inch heel.",
+    "image": "https://n.nordstrommedia.com/id/sr3/4dbfd18a-a5a6-4335-8dcb-630276c1c334.jpeg?trim=color&pad_color=FFF&format=jpeg&trim=color&trimcolor=FFF&w=350&h=536&trimcolor=FFF"
+  },
+  {
+    "id":9,
+    "name": "Nike Blazer Mid '77",
+    "price": 105.00,
+    "description": "Delivers a timeless easy to wear design. Its crisp leather pairs with bold retro branding and luscious suede accents for a premium feel. Exposed foam on the tongue and a special midsole finish.",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/7177kgFneVL._SLDPMOBCAROUSELAUTOCROP288221_MCnd_AC_SR462,693_.jpg"
+  },
+  {
+    "id":10,
+    "name": "Michael Kors Perla Suede Block Heel Pumps",
+    "price": 170.00,
+    "description":"Crafted of suede leather, finished with a goldtone buckle closure and delicate logo charm. With a heel of about 2.25 inches and closed round toe.",
+    "image": "https://johnlewis.scene7.com/is/image/JohnLewis/006503746?$fashion-ui$"
+  },
+  {
+    "id":11,
+    "name": "Vans Sk8 Hi",
+    "price": 80.00,
+    "description":"This legendary high-top shoe's sturdy suede and canvas uppers allow for maximum attitude. Reinforced toe caps, supportive padded collars, and our signature rubber waffle outsoles.",
+    "image": "https://plusskateshop.com/cdn/shop/products/4_3f45af82-606b-4766-956c-a53d7e2ad748_1024x1024.jpg?v=1616431563"
+  },
+  {
+    "id":12,
+    "name": "Dr. Martens Jadon Boot",
+    "price": 209.99,
+    "description": "An 8-eye silhouette, built from DM's classic Polished Smooth leather and stacked on a PVC outsole. The Jadon boot is secured with yellow welt stitching and tagged with an AirWair heel loop.",
+    "image": "https://images.journeys.com/images/products/1_494122_FS_THERO.JPG"
+  }
+]

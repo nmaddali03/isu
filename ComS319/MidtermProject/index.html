@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hangman</title>
+        <!-- Google Fonts -->
+        <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+        rel="stylesheet"
+        />
+        <!-- Stylesheet -->
+        <link rel="stylesheet" href="style.css" />
+    </head>
+
+    <body>
+        <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hangman.html">Play</a></li>
+        <li><a class="active" href="about.html">About</a></li>
+        </ul>
+
+        <br><br>
+
+        <!-- Main Content Section -->
+        <div class="content" style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <h1>How to Play Hangman</h1> <br>
+            <p>
+                The game web page will ask you to select a level of difficulty: easy, medium, hard. After a
+                choice has been made, the game set up will be a set of dashes/underscores to represent the hidden
+                word. 
+            </p> <br>
+            <p>
+                There will be set up for the stick figure hangman to be drawn to represent the "life” 
+                of the game. <br> <br>
+                
+                You can guess letters in two ways: <br>
+
+                1. Click a letter on the display screen keyboard <br>
+                2. Click a letter on your physical keyboard. <br>
+                
+                For every letter guessed,  the keyboard will disable the letter.
+            </p> <br>
+            <p>
+                If the guessed letter is a part of the hidden word or phrase, then that letter will be appear in its
+                correct location of the set of dashes. If the guessed letter is not a part of the hidden word or
+                phrase, then an element of the hangman will appear.
+            </p> <br>
+            <p>
+                You will continue playing the game until they guess the hidden word or until there
+                are no more elements to add to the hangman. If all elements of the hangman are added,
+                then you have lost the game, and the hidden word or phrase will be revealed. If you guesse
+                the word without adding all hangman elements, then you have won.
+            </p>
+        </div>
+        <br> <br>
+
+        <h2 style="text-align:center">Here is an example</h2>
+        <div style="text-align: center;">
+            <video width="500" height="500" controls>
+                <source src="demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <br><br>
+
+    </body>
+</html>

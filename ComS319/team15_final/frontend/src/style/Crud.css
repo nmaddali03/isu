@@ -1,0 +1,65 @@
+/* styles.css */
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: #f0f7f4;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  color: #546e7a;
+}
+
+.button {
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.showListButton {
+  background: #81c784;
+  color: #fff;
+}
+
+.wordList {
+  text-align: center;
+  color: #546e7a;
+}
+
+.listItem {
+  margin-bottom: 8px;
+  background: #fafafa;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.formSection {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #546e7a;
+}
+
+.inputField {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.addWordButton {
+  background: #64b5f6;
+  color: #fff;
+}
+
+.deleteWordButton {
+  background: #e57373;
+  color: #fff;
+}
