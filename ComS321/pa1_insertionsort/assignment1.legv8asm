@@ -1,0 +1,127 @@
+//Sylvia Nguyen, sylviang
+//Neha Maddali, nmaddali
+//Programming Assignment1
+//README: Our array that is being sorted is initialized and filled of integers from 512 to 1, with 512 initially being in the first array index (a[0]).
+// The array is initialized from high to low order(reverse order). To run the program, type ./legv8emul assignment1.legv8asm in the console/emulator. After running the program, the array should
+// be in low-to-high order in the main memory, with 1 being stored at a[0].
+
+
+main:
+	ADD X0, XZR, XZR
+	ADDI X1, XZR, #512
+	BL fill
+// X0 = addr
+// X1 = length
+fill:
+	SUB X9, X1, XZR
+	//if X1 = 0, end
+	CBZ X9, end_fill
+	STUR X1, [X0, #0]
+	SUBI X1, X1, #1
+	ADDI X0, X0, #8
+	B fill
+end_fill:
+	//BR LR
+	ADDI X1, XZR, #512 // X1 = length
+	ADD X0, XZR, XZR // XO = addr
+	SUBI SP, SP, #8 // using this space in insertion sort loop
+	B insertionSort
+	DUMP
+
+// X5 = addr
+// X7 = pos
+// X2 = final
+shiftRight:
+	LDUR X7, [SP, #32] // load X7
+	LDUR X5, [SP, #8] // load X5
+	SUBI X14, X2, #1 // X14 = final - 1 (i)
+shiftRightLoop:
+	SUB X14, X14, X7
+	ADDI X15, X14, #1
+	// if i + 1 = pos, end loop
+	CBZ X15, end_shift_right_loop
+	// else
+	ADD X14, X14, X7
+	LSL X13, X14, #3
+	ADD X13, X13, X5
+	LDUR X12, [X13, #0] // X21 = addr[i]
+	ADDI X13, X13, #8
+	STUR X12, [X13, #0] // addr[i + 1] = addr[i]
+	SUBI X14, X14, #1
+	B shiftRightLoop
+end_shift_right_loop:
+	STUR X5, [SP, #8] // store X5
+	STUR X7, [SP, #32] // store X7
+	BR LR
+
+//X5 = addr
+//X1 = val
+//X2 = final
+findSortedPos:
+	ADD X0, XZR, XZR //zero out X0 to prepare for a return
+	LDUR X5, [SP, #8]
+	LDUR X2, [SP, #24]
+findSortedPosLoop:
+	LSL X11, X0, #3
+	ADD X11, X11, X5
+	LDUR X11, [X11, #0] //X11 = addr[i]
+	//if addr[i] >= val, break out loop and return i
+	SUBS X11, X11, X1
+	B.GE end_find_pos_loop
+	//if i = final, break out loop and return i
+	SUB X12, X2, X0
+	CBZ X12, end_find_pos_loop
+	//else continue the loop
+	ADDI X0, X0, #1
+	B findSortedPosLoop
+end_find_pos_loop:
+	STUR X5, [SP, #8] //store X5
+	STUR X2, [SP, #24] //store X2
+	BR LR
+
+// X5 = addr
+// X6 = pos
+// X2 = final
+insertSortedPos:
+	LDUR X6, [SP, #0] // load X6
+	LSL X9, X6, #3
+	ADD X9, X5, X9 // X9 = &addr[i]
+	LDUR X10, [X9, #0] // X10 = addr[i] = v
+	SUBI SP, SP, #40 // make space
+	STUR X6, [SP, #0] // store X6
+	STUR X5, [SP, #8] // store X5
+	STUR X1, [SP, #16] // store X1
+	STUR X2, [SP, #24] // store X2
+	ADDI X1, X10, #0 // X1 = v
+	BL findSortedPos
+	ADDI X11, X0, #0 // X11 = p (from return value in X0)
+	LDUR X1, [SP, #16] // get back X1
+	ADDI X7, X11, #0 // X7 = p
+	STUR X7, [SP, #32] // store X7
+	STUR X11, [SP, #40] // store X11
+	LDUR X2, [SP, #0]
+	BL shiftRight
+	LDUR X6, [SP, #0] // get back X6
+	LDUR X2, [SP, #24] // get back X2
+	LDUR X5, [SP, #8] // get back X5
+	LDUR X7, [SP, #32] // get back X7
+	LDUR X11, [SP, #40] // get back X11
+	ADDI SP, SP, #40 // restore space
+	LSL X9, X11, #3
+	ADD X9, X9, X5
+	STUR X10, [X9, #0]
+	B insertionSort
+
+// X0 = addr
+// X1 = length
+insertionSort:
+	ADDI X6, X6, #1 // X6 = i
+	STUR X6, [SP, #0] // store X6
+	SUB X10, X6, X1
+	CBZ X10, end_insertion_sort
+	SUBI X2, X1, #1 // X2 = final index (length - 1)
+	B insertSortedPos
+end_insertion_sort:
+	LDUR X6, [SP, #0]
+	ADDI SP, SP, #8 // restore rest of space
+	DUMP
