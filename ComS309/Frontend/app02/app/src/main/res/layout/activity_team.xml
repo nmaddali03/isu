@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Team">
+
+    <!-- GRADIENT (BG) -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/sunriseGradient"
+            android:alpha="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/sunrisegradient" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/teamTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOUR TEAM"
+                android:textColor="#F4F0F0"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.117" />
+
+            <Button
+                android:id="@+id/exitButton"
+                android:layout_width="125dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:text="Main Menu"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.046"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/chatButton"
+                android:layout_width="104dp"
+                android:layout_height="51dp"
+                android:text="CHAT"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.785"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle"
+                app:layout_constraintVertical_bias="0.954" />
+
+            <Button
+                android:id="@+id/leaderSettingsBtn"
+                android:layout_width="178dp"
+                android:layout_height="50dp"
+                android:text="LEADER SETTINGS"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.15"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle"
+                app:layout_constraintVertical_bias="0.954" />
+
+            <TextView
+                android:id="@+id/rankTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="RANK"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.117"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/rank1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="92dp"
+                android:text="1"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.117"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/rank2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="156dp"
+                android:text="2"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.115"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/rank3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="216dp"
+                android:text="3"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.115"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/rank4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="280dp"
+                android:text="4"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.115"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/scoreTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="SCORE"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.879"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/user1"
+                android:layout_width="147dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="92dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.245"
+                app:layout_constraintStart_toEndOf="@+id/rank1"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/user2"
+                android:layout_width="147dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="156dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintStart_toEndOf="@+id/rank1"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/user3"
+                android:layout_width="147dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="216dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.254"
+                app:layout_constraintStart_toEndOf="@+id/rank1"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/user4"
+                android:layout_width="147dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="280dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.254"
+                app:layout_constraintStart_toEndOf="@+id/rank1"
+                app:layout_constraintTop_toBottomOf="@+id/teamTitle" />
+
+            <TextView
+                android:id="@+id/score1"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="24dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.516"
+                app:layout_constraintStart_toEndOf="@+id/user1"
+                app:layout_constraintTop_toBottomOf="@+id/scoreTitle" />
+
+            <TextView
+                android:id="@+id/score2"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="88dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.516"
+                app:layout_constraintStart_toEndOf="@+id/user1"
+                app:layout_constraintTop_toBottomOf="@+id/scoreTitle" />
+
+            <TextView
+                android:id="@+id/score3"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="148dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.516"
+                app:layout_constraintStart_toEndOf="@+id/user1"
+                app:layout_constraintTop_toBottomOf="@+id/scoreTitle" />
+
+            <TextView
+                android:id="@+id/score4"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="212dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.516"
+                app:layout_constraintStart_toEndOf="@+id/user1"
+                app:layout_constraintTop_toBottomOf="@+id/scoreTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- SUN (BG)-->
+
+    <!-- CLOUDS (BG) -->
+
+    <!-- MOUNTAINS (BG) -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

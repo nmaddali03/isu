@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/daytimeGradient"
+            android:alpha="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/daygradient" />
+
+        <ImageView
+            android:id="@+id/dawnGradient"
+            android:alpha="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dawngradient"
+            />
+
+        <ImageView
+            android:id="@+id/sunriseGradient"
+            android:alpha="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/sunrisegradient" />
+
+        <ImageView
+            android:id="@+id/nightGradient"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/nightgradient" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/fastCloud"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:alpha=".2"
+            app:srcCompat="@drawable/fastcloud" />
+
+        <ImageView
+            android:id="@+id/mediumCloud"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:alpha=".2"
+            app:srcCompat="@drawable/mediumcloud" />
+
+        <ImageView
+            android:id="@+id/slowCloud"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            android:alpha=".2"
+            app:srcCompat="@drawable/slowcloud" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/sun"
+        android:layout_width="158dp"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="158dp"
+            android:layout_height="150dp"
+            android:background="@drawable/sun" />
+    </LinearLayout>
+
+<RelativeLayout
+    android:layout_width="600dp"
+    android:layout_height="400dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias=".22"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="1" >
+    <ImageView
+        android:id="@+id/daytimeMt"
+        android:alpha="0"
+        android:layout_width="500dp"
+        android:layout_height="400dp"
+        android:background="@drawable/daytimemt"
+        tools:layout_editor_absoluteX="-95dp"
+        tools:layout_editor_absoluteY="341dp" />
+
+    <ImageView
+        android:id="@+id/dawnMt"
+        android:alpha="0"
+        android:layout_width="500dp"
+        android:layout_height="400dp"
+        android:background="@drawable/dawnmt"
+        tools:layout_editor_absoluteX="-95dp"
+        tools:layout_editor_absoluteY="341dp" />
+
+    <ImageView
+        android:id="@+id/sunriseMt"
+        android:alpha="0"
+        android:layout_width="500dp"
+        android:layout_height="400dp"
+        android:background="@drawable/sunrisemt"
+        tools:layout_editor_absoluteX="-95dp"
+        tools:layout_editor_absoluteY="341dp" />
+
+    <ImageView
+        android:id="@+id/nightMt"
+        android:layout_width="500dp"
+        android:layout_height="400dp"
+        android:alpha="1"
+        android:background="@drawable/nightmt"
+        tools:layout_editor_absoluteX="-95dp"
+        tools:layout_editor_absoluteY="341dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa"
+        android:text="Click Button 40 times \nto deactivate alarm"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:alpha=".6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.11" />
+
+    <LinearLayout
+        android:layout_width="130dp"
+        android:layout_height="53dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.940" >
+
+        <Button
+            android:id="@+id/btnClick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wake-Up"
+            android:fontFamily="@font/comfortaa"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/counterText"
+        android:layout_width="157dp"
+        android:layout_height="148dp"
+        android:fontFamily="@font/comfortaa"
+        android:text="0"
+        android:textAlignment="center"
+        android:textSize="96sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:alpha=".6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.397" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

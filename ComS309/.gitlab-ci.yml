@@ -1,0 +1,66 @@
+stages:
+  - mavenbuild
+  - maventest
+  - mavenDeploy
+  - androidbuild
+  - androidtest
+
+maven-build:
+  stage: mavenbuild
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/springboot_main
+    - mvn package
+    
+maven-test:
+  stage: maventest
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/springboot_main
+    - mvn test
+  artifacts:
+    paths:
+      - Backend/springboot_main/target/*.jar
+      
+
+autoDeploy:
+  stage: mavenDeploy
+  tags:
+   - springboot_tag
+  script:
+    - cd Backend/springboot_main
+    - mvn package
+    - sudo mv target/*.jar /target/web-server.jar 
+    - sudo systemctl stop system-web-demo
+    - sudo systemctl start system-web-demo
+
+android-build:
+  image: alvrme/alpine-android:android-28-jdk11
+  stage: androidbuild
+  tags:
+   - android_tag
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./Frontend/app02/gradlew
+  script:
+    - cd Frontend/app02
+    - ./gradlew assemble
+  artifacts:
+    paths:
+    - Frontend/app02/app/build/outputs/
+
+android-test:
+  image: alvrme/alpine-android:android-28-jdk11
+  stage: androidtest
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./Frontend/app02/gradlew
+  tags:
+   - android_tag
+  script:
+    - cd Frontend/app02
+    - ./gradlew test
+
+

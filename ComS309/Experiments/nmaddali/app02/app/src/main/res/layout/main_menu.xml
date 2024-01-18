@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainMenu">
+
+    <!-- GRADIENT (BG) -->
+    <RelativeLayout
+        android:id="@+id/bgLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:scaleType="centerInside"
+            android:gravity="center"
+            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- SUN (BG)-->
+    <LinearLayout
+        android:id="@+id/sun"
+        android:layout_width="165dp"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.25">
+        <ImageView
+            android:layout_width="158dp"
+            android:layout_height="150dp"
+            android:background="@drawable/sun" />
+    </LinearLayout>
+
+    <!-- CLOUDS (BG) -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/fastCloud"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:alpha=".2"
+            app:srcCompat="@drawable/fastcloud" />
+        <ImageView
+            android:id="@+id/mediumCloud"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:alpha=".2"
+            app:srcCompat="@drawable/mediumcloud" />
+
+        <ImageView
+            android:id="@+id/slowCloud"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            android:alpha=".2"
+            app:srcCompat="@drawable/slowcloud" />
+    </RelativeLayout>
+
+    <!-- MOUNTAINS (BG) -->
+    <RelativeLayout
+        android:layout_width="500dp"
+        android:layout_height="380dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".45"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1" >
+
+        <ImageView
+            android:id="@+id/foreground"
+            android:layout_width="500dp"
+            android:layout_height="380dp"
+            android:alpha="1"
+            tools:layout_editor_absoluteX="-95dp"
+            tools:layout_editor_absoluteY="341dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- MAIN GAMEPLAY BUTTONS -->
+    <LinearLayout
+        android:layout_width="131dp"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6">
+        <!-- GAME BUTTON -->
+        <Button
+            android:id="@+id/btnWake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:text="Wake-Up" />
+        <!-- SET ALARM BUTTON -->
+        <Button
+            android:id="@+id/btnSetAlarm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:text="Set Alarm" />
+        <!-- TEAM BUTTON -->
+        <Button
+            android:id="@+id/btnTeam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My Team"
+            android:fontFamily="@font/comfortaa"
+            />
+    </LinearLayout>
+
+    <!-- GAME TITLE -->
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        app:layout_constraintVertical_bias="0.18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/gameTitle"
+            android:layout_width="350dp"
+            android:layout_height="160dp"
+            android:background="@drawable/gametitle"
+            android:backgroundTint="#9E9FD5"
+            tools:layout_editor_absoluteX="22dp"
+            tools:layout_editor_absoluteY="663dp"
+            android:alpha="0"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- FRIENDS BUTTON -->
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintVertical_bias=".97"
+        app:layout_constraintHorizontal_bias=".085"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/friends"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/friends"
+            tools:layout_editor_absoluteX="22dp"
+            tools:layout_editor_absoluteY="663dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- CHAT BUTTON -->
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintVertical_bias=".97"
+        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/chat"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/chat"
+            tools:layout_editor_absoluteX="2dp"
+            tools:layout_editor_absoluteY="663dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- ITEMS BUTTON -->
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintVertical_bias=".97"
+        app:layout_constraintHorizontal_bias=".635"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/items"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/items"
+            tools:layout_editor_absoluteX="2dp"
+            tools:layout_editor_absoluteY="663dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- LEADERBOARD BUTTON -->
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintVertical_bias=".97"
+        app:layout_constraintHorizontal_bias=".91"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/leaderboard"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/leaderboard"
+            tools:layout_editor_absoluteX="2dp"
+            tools:layout_editor_absoluteY="663dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <!-- SETTINGS BUTTON -->
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintVertical_bias=".025"
+        app:layout_constraintHorizontal_bias=".958"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/settings"
+            tools:layout_editor_absoluteX="2dp"
+            tools:layout_editor_absoluteY="663dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="username"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        >
+    </TextView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
