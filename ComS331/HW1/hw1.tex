@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+%\usepackage{graphicx}    % needed for including graphics e.g. EPS, PS
+\usepackage{setspace}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\topmargin -1.5cm        % read Lamport p.163
+\oddsidemargin -0.04cm   % read Lamport p.163
+\evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+\textwidth 16.59cm
+\textheight 21.94cm
+%\pagestyle{empty}       % Uncomment if don't want page numbers
+\parskip 7.2pt           % sets spacing between paragraphs
+\renewcommand{\baselinestretch}{1} % Uncomment for 1.5 spacing between lines
+\parindent 0pt         % sets leading space for paragraphs
+
+\begin{document}
+\title{COMS 331: Theory of Computing, Spring 2023\\
+Homework Assignment 1}
+\author{Due at 10:00PM, Wednesday, February 1, on Gradescope.\\}
+\date{}
+\maketitle
+
+Note: In this class, 0 is a natural number, i.e. $0\in\mathbb{N}$.\\\\
+
+{\bf Problem 1.} Prove or disprove: If $A = \{0^n1^n\mid n \in \mathbb{N}\}$, then $A^* = A$.\\\\
+
+{\bf Problem 2.} Prove or disprove: If $B = \{x \in \{0,1\}^*\mid\#(0,x) = \#(1,x)\}$, then $B^* = B$.\\
+
+Note: The notation $\#(0,x)$ is used to denote the number of 0's in $x$. Likewise, $\#(1,x)$ is used to denote the number of 1's in $x$.\\\\
+
+{\bf Problem 3.} Prove: For every positive integer $n$,
+\begin{center}
+$\displaystyle\sum\limits_{k=1}^n \frac{1}{k^2} \leq 2 - \frac{1}{n}$.
+\end{center}
+
+\vspace{0.75cm}
+
+The demonstration that all of mathematics can be carried out within the framework of set theory includes the following ``definition" of the natural numbers. First, the number 0 is defined to be $\varnothing$, the empty set. Next, for each previously defined natural number $n$, the number $n+1$ is defined to be the set $n \cup \{n\}$.\\
+
+{\bf Problem 4.} (a) Write out the numbers 1, 2, and 3, defined as above.
+
+(b) Prove: For every $n \in \mathbb{N}$, $n = \{k \in \mathbb{N} \mid k < n\}$.\\\\
+
+{\bf Problem 5.} Prove: If $A = \{0,1\}$ and $B \subseteq \{0,1\}^*$, then
+\begin{center}
+$A^* = B^* \Rightarrow A \subseteq B$.
+\end{center}
+
+\vspace{0.75cm}
+
+{\bf Problem 6.} Exhibit languages $A,B \subseteq \{0,1\}^*$ such that $A^* = B^*$ and $\{0,1\} \subseteq A \subsetneq B$.\\\\
+
+{\bf Problem 7.} Define an (infinite) binary sequence $s \in \{0,1\}^{\infty}$ to be \emph{prefix-repetitive} if there are infinitely many strings $w \in \{0,1\}^*$ such that $ww \sqsubseteq s$.\\
+
+Prove: If the bits of a sequence $s \in \{0,1\}^{\infty}$ are chosen by independent tosses of a fair coin, then
+\begin{center}
+$Prob[s$ is prefix-repetitive$] = 0$.
+\end{center}
+Note: $x \sqsubseteq y$ means that $x$ is a prefix of $y$ where $x$ is a string and $y$ is a string or sequence.\\
+
+
+\end{document}
