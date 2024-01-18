@@ -1,0 +1,16 @@
+1223437112 ^ / – ^ *25 % +
+Error: too many operators (^)
+Error: too many operators (+)
+23 *12 / -16 -
+Error: no closing parenthesis detected
+Error: too many operands (5)
+Error: too many operands (3)
+Error: too many operators (*)
+1223437112 ^ / – ^ *25 % +
+Error: too many operators (^)
+Error: too many operators (+)
+23 *12 / -16 -
+Error: no closing parenthesis detected
+Error: too many operands (5)
+Error: too many operands (3)
+Error: too many operators (*)
