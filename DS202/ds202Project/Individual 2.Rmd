@@ -1,0 +1,156 @@
+---
+title: "Individual 2"
+author: "Arlena Wang"
+date: "12/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(ggrepel)
+library(lubridate)
+library(reshape2)
+```
+
+#import the data
+```{r warning=FALSE}
+data <- readxl::read_xlsx('ClimateChange.xlsx', sheet='Data')
+country <- readxl::read_xlsx('ClimateChange.xlsx', sheet='Country')
+series <- readxl::read_xlsx('ClimateChange.xlsx', sheet='Series')
+```
+
+#change the ".." cells in the years to n/a or 0
+```{r}
+data <- na_if(data, '..')
+```
+
+## Questions Investigated
+1.) Which country had the most cause/impact towards climate change from 1990-2011? 
+
+2.) How does the US gas emissions compare to other countries? 
+
+3.) What was the population growth/change over the time period 1990-2011? 
+
+4.) Does the amount of gas emissions affect the total population?
+
+## Data Analysis
+
+**1.) Which country had the most cause/impact towards climate change from 1990-2011?**
+
+**Variable utilized:**
+EN.ATM.CO2E.KT = CO2 emissions, total (KtCO2)
+
+```{r}
+gas <- data %>% filter(`Series code` == 'EN.ATM.CO2E.KT') %>% 
+  summarize(Country_Name =`Country name`, Series_Code =`Series code`,`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,
+            `1997`,`1998`,`1999`,`2000`,`2001`,`2002`,`2003`,`2004`,`2005`,`2006`,`2007`,
+            `2008`,`2009`,`2010`,`2011`)
+
+gas<-melt(gas, id.vars=c("Country_Name", "Series_Code"))
+
+gas <- gas %>%
+  group_by(Country_Name) %>%
+  summarize(Country_Name,Series_Code, year=`variable`,gas_emission=`value`)
+
+gas$Series_Code <- NULL
+
+gassignificant <- filter(gas, Country_Name %in% c("China", "Germany", "India", "Iran, Islamic Rep.", "Japan", "Korea, Dem. Rep.", "Russian Federation", "United States"))
+
+ggplot(gassignificant, aes(x=year, y=gas_emission)) + geom_bar(stat="identity") + facet_wrap(~Country_Name, scales="free") + labs(x="Year", y="Gas Emissions (KtCO2)", title="Gas Emissions from 1990-2011") + theme(axis.text.x = element_text(angle = 90))
+```
+This figure shows only the most relevant countries with larger quantities of gas emission.  This includes China, Germany, India, Iran, Islamic Republic, Japan, Korea, Democratic Republic, Russian Federation, and the United States.
+
+
+As climate change is mainly caused by gas emissions, from years 1990 to 2011, China has contributed the most towards climate change based on the provided figure.  When looking at the figure, China has an increasing gas emission value as years pass with the highest gas emission in 2008, at 7031916.21 million metric tons of CO2.  This presents relevant information as China maintains a very large infrastructure development which emits a large amount of CO2 during the refining process.  Many construction-related activities from this cause the CO2 emissions.
+
+**2.) How does the US gas emissions compare to other countries?**
+
+Looking at the same figure, it seems that US has the second most gas emissions as it also has an increasing value of gas emissions over the years with its highest value at 5461013.74 million metric tons of CO2.  This may be due the amount of transportation, electricity, industry, and agriculture that is present in the US.  There are some fluctuations that can be due to changes in economy, price of fuel, and other factors.  Overall, it follows a similar trend to other countries as there is a positive relationship between year and amount of gas emissions.  
+
+**3.) What was the population growth/change over the time period 1990-2011?**
+
+**Variable utilized:**
+SP.POP.GROW=population growth (annual %)
+
+```{r}
+pop <- data %>% filter(`Series code` == 'SP.POP.GROW') %>% 
+  summarize(`Country name`, `Series code`,`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,
+            `1997`,`1998`,`1999`,`2000`,`2001`,`2002`,`2003`,`2004`,`2005`,`2006`,`2007`,
+            `2008`,`2009`,`2010`,`2011`)
+
+pop<-melt(pop, id.vars=c("Country name", "Series code"))
+
+pop <- pop %>%
+  group_by(`Country name`) %>%
+  summarize(Country_Name=`Country name`,`Series code`, year=`variable`,population=`value`)
+
+pop$`Series code` <- NULL
+pop$`Country name` <- NULL
+
+popsignificant <- filter(pop, Country_Name %in% c("China", "Germany", "India", "Iran, Islamic Rep.", "Japan", "Korea, Dem. Rep.", "Russian Federation", "United States"))
+
+ggplot(popsignificant, aes(x=year, y=population)) + geom_point() + facet_wrap(~Country_Name) + labs(x="Year", y="Population Growth (annual %)", title="Population Growth from 1990-2011") + theme(axis.text.x = element_text(angle = 90)) 
+```
+
+The figure shows a general decrease in population growth for annual percentage as years increase from 1990 to 2011.  While this may be coincidental, it may be due to problems that are caused by climate change.
+
+**4.) Does the amount of gas emissions affect the total population?**
+
+**Variable utilized:**
+EN.ATM.CO2E.KT = CO2 emissions, total (KtCO2)
+SP.POP.TOTL= total population
+
+```{r}
+gas <- data %>% filter(`Series code` == 'EN.ATM.CO2E.KT') %>% 
+  summarize(Country_Name =`Country name`, Series_Code =`Series code`,`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,
+            `1997`,`1998`,`1999`,`2000`,`2001`,`2002`,`2003`,`2004`,`2005`,`2006`,`2007`,
+            `2008`,`2009`,`2010`,`2011`)
+
+gas<-melt(gas, id.vars=c("Country_Name", "Series_Code"))
+
+gas <- gas %>%
+  group_by(Country_Name) %>%
+  summarize(Country_Name,Series_Code, year=`variable`,gas_emission=`value`)
+
+gas$Series_Code <- NULL
+
+gassignificant <- filter(gas, Country_Name %in% c("China", "Germany", "India", "Iran, Islamic Rep.", "Japan", "Korea, Dem. Rep.", "Russian Federation", "United States"))
+
+totalpop <- data %>% filter(`Series code` == 'SP.POP.TOTL') %>% 
+  summarize(`Country name`, `Series code`,`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,
+            `1997`,`1998`,`1999`,`2000`,`2001`,`2002`,`2003`,`2004`,`2005`,`2006`,`2007`,
+            `2008`,`2009`,`2010`,`2011`)
+
+totalpop<-melt(totalpop, id.vars=c("Country name", "Series code"))
+
+totalpop <- totalpop %>%
+  group_by(`Country name`) %>%
+  summarize(Country_Name=`Country name`,`Series code`, year=`variable`,Total_population=`value`)
+
+totalpop$`Series code` <- NULL
+totalpop$`Country name` <- NULL
+
+totalpopsignificant <- filter(totalpop, Country_Name %in% c("China", "Germany", "India", "Iran, Islamic Rep.", "Japan", "Korea, Dem. Rep.", "Russian Federation", "United States"))
+
+effect <- totalpopsignificant %>%
+  inner_join(gassignificant %>%
+          select(Country_Name, year, gas_emission),
+          by=c("Country_Name", "year"))
+
+ggplot(effect, aes(x=Total_population, y=gas_emission)) + geom_point() + facet_wrap(~Country_Name, scales="free") + labs(x="Gas Emissions (KtCO2)", y="Total Population", title="Gas Emissions Vs. Total Population from 1990-2011") + theme(axis.text.x = element_text(angle = 90))
+```
+
+The figure shows a general positive relationship between total population and amount of gas emissions.  The Russian Federation shows a decrease then increase in amount of gas emissions.  Germany had a general decrease between total population and gas emissions.  Germany and the Russian Federation may be trying to significantly reduce their fuel emissions.  The general pattern of an increase in population correlates with an increase in gas emissions for most countries.  This is due to more people causing more activity and fuel consumption which leads to more gas emissions.
+
+**Other Conclusions**
+Most countries have an increasing value of gas emissions over the years from 1990-2011 which indicates a continuity of increasing gas emission today.  Some countries including Germany and the Russian Federation have some fluctuation in the amount of gas emissions showing some decline and incline.  
