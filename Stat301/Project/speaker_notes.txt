@@ -1,0 +1,70 @@
+Project Background and Data Description
+The dataset we selected was the Airbnb listings subset.  This data is a random sample from Airbnb hosts specifically with listings in 
+Chicago, IL from August 2008 to May 2017. Our projects looks at three explanatory variables to predict price. Our response variable 
+is the quantitative variable, price. We chose the quantitative explanatory variable of accommodates which is how many people can be 
+accommodated in the Airbnb. Our qualitative explanatory variables are cancellation_policy and property_type. Cancellation_policy has 
+three categories: strict, moderate, and flexible. We chose strict as our reference group. Property_type has five categories: house, 
+apartment, condominium, townhouse and other. We chose house as our reference group. We had to manipulate the property_type variable 
+as the dataset initially had more than five categories for this variable. We decided to categorize all other property types that were 
+not as frequent as house, apartment, condominium and townhouse, into the other category.
+
+Scatterplot
+This is a scatterplot from Graph Builder including the variables price, accommodates, property_type and cancellation_policy. Price is 
+the response variable, shown along the y-axis. Accommodates is the quantitative explanatory variable, shown along the x-axis. 
+Property_type is a qualitative explanatory variable, represented by the color in the graph. Cancellation_policy is another 
+qualitative explanatory variable, represented by the size of the individual data point dots on the graph. The slopes of each of the 
+lines are not that significant in difference. There is no missing data for our model, so this is not a concern for this dataset. 
+
+Results from Multiple Regression Analysis
+Here a table comprised of all relevant information for each of the models we constructed. We looked at 5 different models: Full, 
+Interaction, Transformation, Quadratic, and Transformation and Interaction. Looking at this table specifically, the Full Model, 
+Interaction Model, and Quadratic Model have similar adjusted R^2 values and RMSE values. The Transformation Model and Transformation 
+and Interaction Model have similar adjusted R^2 values and RMSE values.
+
+Models
+Like mentioned previously, we made five models. The Full Model included the property_type, cancellation_policy and accommodates 
+variables with price as a response variable. The Interaction Model included everything from the Full Model with an addition of 
+crossing property_type and accommodates to create four interaction terms. The Transformation Model included property_type, 
+cancellation_policy, and the natural log transformation of accommodates with a the natural log transformation of price as the 
+response variable. The Quadratic Model included everything from the Full Model with an addition of the quadratic term for 
+accommodates. The Transformation and Interaction Model was a combination of the Interaction Model and the Transformation Model mentioned. 
+
+Chosen Model
+The we chose the Transformation Model as it was our best model of the five. It had the highest adjusted R^2 of 0.38, the lowest 
+RMSE of 107.62, the lowest Mallow's Cp of 8, the lowest F-test value of 44.59 with a very small p-value of <0.0001 and has the 
+fewest number of variables.
+
+Chosen Model Results
+The sample size is 500. The predicted expression from JMP is as listed, predicting the ln(price). In addition, 37.95% of 
+variability in ln(price) can be explained by a linear model with property_type, ln(accommodates), and cancellation_policy 
+after adjusting for the complexity of the model.
+
+Graphs for Checking Conditions
+Here are all the relevant graphs for checking conditions.
+
+Checking Conditions
+Independence is met because the data was collected by using a simple random sample, meaning that the Airbnb's did not 
+influence one another. Linearity is met because based on the scatterplot in the previous slide, there is not a curve present. 
+Normality is met because based on the Normal Quantile plot, the data is within the recommended boundaries. Equal variance is 
+met because the Residual by Predicted Plot doesn't show a fan and the means are equally distributed above and below the mean of zero.
+
+Influence and Leverage Plot
+High Leverage was calculated from h>2(8/500). Very High Leverage was calculated from h>3(8/500). There are approximately twenty 
+outliers that are high leverage. There are approximately ten outliers that are above a standardized residual of 2 and approximately 
+five outliers below a standardized residual of -2. There are no outliers with a Cook's D value above 0.5 or 1, so there is not any 
+high influence outliers.
+
+Hypothesis Tests
+A Partial F-test for the explanatory variable property_type for the Transformation Model was done to determine if property_type 
+is a predictor of ln(price). With a test statistic of 3.226 and a p-value of 0.012, it can be concluded that there is strong 
+evidence to suggest that the property type is a predictor of ln(price).
+
+Hypothesis Tests
+A Partial F-test for the explanatory variable cancellation_policy for the Transformation Model was done to determine if 
+cancellation_policy is a predictor of ln(price). With a test statistic of 1.405 and a p-value of 0.246, it can be concluded that 
+there is little to no evidence to suggest that the cancellation policy is a predictor of ln(price)
+
+Hypothesis Tests
+A Partial F-test for the transformed explanatory variable ln(accommodates) for the Transformation Model was done to determine 
+if accommodates is a predictor of ln(price). With a test statistic of 278.944 and a p-value of 6.18e-50, it can be concluded 
+that there is overwhelming evidence to suggest that ln(accommodates) is a predictor of ln(price).
