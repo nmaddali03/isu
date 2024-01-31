@@ -1,0 +1,28 @@
+---
+title: "Creative Map"
+author: "Neha Maddali"
+date: "4/30/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message = FALSE}
+library(tidyverse)
+library(lubridate)
+states <- map_data('state')
+
+covidRaw <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv') 
+covid <- covidRaw %>%
+  filter(date == mdy('08/31/21')) %>%
+  group_by(state) %>%
+  summarize(totCases = sum(cases),
+            totDeaths = sum(deaths))
+
+covid$region <- tolower(covid$state)
+joinedDat <- inner_join(covid, states, by='region')
+
+ggplot(joinedDat, aes(x=long, y=lat, group=group, fill=totCases)) + geom_polygon() +ggtitle("Total Covid cases by state")
+```

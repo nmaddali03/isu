@@ -1,0 +1,84 @@
+---
+title: "Homework 6"
+author: "Neha Maddali"
+date: "11/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE}
+rm(list=ls())
+library(tidyverse)
+library(ggrepel)
+```
+
+## Question 1
+
+Import the data and clean appropriately. To read in the data, you can use readxl::read_xlsx('fileNameHere', sheet='sheetNameHere'). Required data are in the sheets Best in show and Best in show full sheet. Take extra care on the column names and the first few rows of the data frame after reading it in.
+
+```{r}
+topDogs <- readxl::read_xlsx('KIB - Best in Show (public).xlsx', sheet='Best in show full sheet', skip=2)
+# Delete the first row
+topDogs <- topDogs[-1,]
+# Get relevant columns and then rename them
+topDogs <- topDogs %>% select(1, "category", "datadog score", 6, "size category", "intelligence category")
+colnames(topDogs) <- c("Breed", "Category", "Score", "Popularity", "Size", "Intelligence")
+
+topDogs <- topDogs %>% filter(!is.na(topDogs$Score))
+
+topDogs$Size = factor(topDogs$Size, levels=c("small", "medium", "large"))
+levels(topDogs$Size)
+levels(topDogs$Size) <- c("sml", "med", "lrge")
+levels(topDogs$Size)
+
+topDogs$Category = factor(topDogs$Category)
+levels(topDogs$Category) <- c("Herding", "Hound", "Non-sporting", "Sporting", "Terrier", "Toy", "Working")
+
+# Adjust the popularity score as numeric
+topDogs <- topDogs %>% filter(!is.na(topDogs$Popularity))
+topDogs$Popularity = as.numeric(topDogs$Popularity)
+
+unique(topDogs$Intelligence)
+# Eliminate dogs that are "no data" or "NA"
+topDogs <- topDogs %>% filter(!is.na(Intelligence))
+topDogs <- topDogs %>% filter(Intelligence != "no data")
+# Change intelligence to dumb or clever
+topDogs <- topDogs %>% mutate(Intelligence = ifelse(Intelligence == "Brightest" | Intelligence == "Excellent" | Intelligence == "Average", "clever", "dumb"))
+# Factor
+topDogs$Intelligence = factor(topDogs$Intelligence)
+levels(topDogs$Intelligence)
+str(topDogs)
+```
+
+## Question 2
+Create a graphics similar to the top dogs figure. Your figure will display the following information using appropriate plotting elements:
+```{r, fig.width=14, fig.height=10}
+plt <- topDogs %>% ggplot(aes(x = Score, y = Popularity, shape=Intelligence, label=Breed, color=Category)) + geom_point(aes(size=Size))
+# Color the points the same colors found in the original plot
+cols <- c('Herding' = '#CB7057', 'Hound' = '#3E3267', 'Non-sporting' = '#618446', 'Sporting' = '#A22729', 'Terrier' = '#A77619', 'Toy' = '#5A1429', 'Working' = '#293E3C')
+plt <- plt + scale_color_manual(values = cols)
+plt <- plt + scale_shape_manual(values=c(15,16))
+# plt <- plt + scale_fill_manual(values = cols)
+plt <- plt + theme_void()
+# Reverse the Popularity axis order
+plt <- plt + scale_y_reverse()
+# Line Segments
+plt <- plt + geom_hline(yintercept=75) + geom_vline(xintercept=2.3)
+# Data point labels.  The overlap is ridiculous
+plt <- plt + geom_label_repel()
+# Labels
+plt <- plt + annotate(geom="text", x = 1, y = 80, label="Score", size = 4)
+plt <- plt + annotate(geom="text", x = 2.45, y = 0.25, label="Popularity", size=4)
+# 4 Corners
+plt <- plt + annotate(geom="text", x = 1.2, y = 1, label="Inexplicably Overrated", size=6)
+plt <- plt + annotate(geom="text", x = 3.5, y = 1, label="Hot Dogs!", size=6)
+plt <- plt + annotate(geom="text", x = 1, y = 170, label="The Rightly Ignored", size=6)
+plt <- plt + annotate(geom="text", x = 3.5, y = 170, label="Overlooked Treasures", size=6)
+plt
+```
+<br />
+
+**The colors go by the category which is listed in the legend on the right. Intelligence of clever or dumb is differentiated by a square or circle. And the size is differentiated by three shape sizes: small, medium, large. There was a lot of overlapping and the dog images are not shown like the infographic displayed. The most data seems to be in the HotDogs quadrant of the graph. **

@@ -1,0 +1,106 @@
+---
+title: "HW2"
+author: "Neha Maddali"
+date: "9/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Commands
+
+An Olympic diving athelete’s scores given by 6 referees were 9.3, 8.7, 9.5, 10, 9, and 8.9. The final score for that dive is the average of the scores after crossing out the highest and lowest scores. Find the final score for that dive. Store the answer in a variable named ave and print.
+
+```{r}
+scores <- c(9.3,8.7,9.5,10,9,8.9)
+maxScore <- max(scores)
+scores <- scores[scores != maxScore]
+scores
+minScore <- min(scores)
+scores <- scores[scores != minScore]
+ave <- mean(scores)
+ave
+```
+
+Create a vector of numbers (with length 21) to show whether the years of 
+2000, 2001, …, 2020 has Olympic Games. An entry of the vector should be 1 
+if the corresponding year has Olympic Games, and 0 otherwise. Note that 
+Olympic Games take place every two years (there are both summer and winter 
+Olympic Games), and that 2020 does not have Olympic Games. Store the answer 
+in a variable named olympic and print.
+
+
+```{r}
+olympic <- c(rep(c(1,0,0),7))
+olympic
+```
+
+Calculate the BMI of Chris and Mary, who are siblings. Chris is 1.8 meters tall and 70 kilograms in weight; Mary is 1.65 meters tall and 49 kilograms in weight. The formula for BMI is BMI = weight (in kg) / height^2 (in meter). Store the answers in a vector of length 2 named bmi and print.
+
+```{r}
+height <- c(1.8, 1.65)
+weight <- c(70,49)
+BMI <- weight / height^2
+BMI
+```
+
+## Cars and Mileage
+```{r}
+library(ggplot2)
+mpg
+str(mpg)
+```
+
+1. What are the 5 least fuel-efficient models in terms of highway mileage? Storage the data frame containing all information of these five models in a variable named worst5 and print. (Hint: Here are a few things you are free to define. E.g., which variable to use to characterize “fuel economy”, and what is a “model”. Please state your definitions.)
+
+We are looking at fuel efficiency through the hwy data
+
+```{r}
+hwy <- mpg$hwy
+sort(hwy)
+sort(hwy, decreasing = FALSE)[1:5]
+worst5 <- mpg[order(mpg$hwy, decreasing=FALSE),][1:5]
+names(worst5)
+str(worst5)
+```
+
+2. How many different midsize models are included in this dataset? Storage the answer in a variable named nummidsize and print.
+
+```{r}
+models <- mpg$model[mpg$class == "midsize"]
+nummidsize <- length(unique(models))
+nummidsize
+```
+
+3. Create a scatterplot of hwy and cty and describe the relationship. Why are there so few points visible? Explain your findings.
+
+My Findings: There are very few points visible because they are overlapping. To
+better illustrate what is happening it might be easier to see the density
+functions for highway and city MPG.
+
+```{r}
+plot(mpg$hwy, mpg$cty, main = "Highway vs City MPG", xlab = "Highway MPG", 
+     ylab = "City MPG")
+```
+
+4. Which manufacturer produces cars with higher fuel efficiency, Dodge or Toyota? Use graphs and summary statistics to answer this question. Explain your findings.
+
+My Findings: Toyota produces cars with higher fuel efficiency rather than Dodge. The city data shows that Toyota has a higher median and mean. Both being higher indicates the higher efficiency in Toyota produced cars. The same applies when looking at the analysis from the highway data. The boxplot also proves this statement. Boxplot 1 is Dodge, Boxplot 2 is Toyota.
+
+```{r}
+dodge <- mpg[mpg$manufacturer == 'dodge', ]
+toyota <- mpg[mpg$manufacturer == 'toyota', ]
+boxplot(dodge$hwy, toyota$hwy)
+
+city_data_Dodge = mpg$cty[mpg$manufacturer == "dodge"]
+summary(city_data_Dodge)
+city_data_Toyota = mpg$cty[mpg$manufacturer == "toyota"]
+summary(city_data_Toyota)
+
+hwy_data_Dodge = mpg$hwy[mpg$manufacturer == "dodge"]
+summary(hwy_data_Dodge)
+hwy_data_Toyota = mpg$hwy[mpg$manufacturer == "toyota"]
+summary(hwy_data_Toyota)
+```
