@@ -1,0 +1,357 @@
+---
+title: "Exploratory Data Analysis"
+author: "Neha Maddali"
+date: "2024-02-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(dplyr)
+library(sf)
+library(tigris)
+library(mapview)
+library(tidycensus)
+library(leaflet)
+library(tmap)
+library(ggplot2)
+```
+
+## Exploring Census Data
+
+```{r}
+# Read tidy census data 
+v17 <- load_variables(2017, "acs5", cache=TRUE)
+```
+
+The following looks at the distribution of sex (male/female) across the counties in Iowa.
+```{r, results='hide',fig.keep='all', warning=FALSE}
+# Get geospatial data -----------------------------------------------------
+# Add sex-related variables to the list of variables
+vars <- c(
+  "B01001_001", # Total Population
+
+  # Sex
+  "B01001_002", # Male Population
+  "B01001_026"  # Female Population
+)
+
+# Retrieve data with sex-related variables
+counties <- get_acs(
+  geography = "county", state = "IA",
+  variables = vars, survey = "acs5",
+  output = "wide", geometry = TRUE
+) |>
+  mutate(
+    male_pct = B01001_002E / B01001_001E,
+    female_pct = B01001_026E / B01001_001E
+  ) |>
+  st_transform(
+    crs = 4326
+  )
+
+# Choropleth map for male population percentage using ggplot
+ggplot(data = counties, aes(fill = male_pct)) +
+  geom_sf() +
+  scale_fill_viridis_c(option = "B", labels = scales::label_percent()) +
+  labs(fill = "Percent\nMale Population") +
+  theme_void()
+
+# Choropleth map for female population percentage using ggplot
+ggplot(data = counties, aes(fill = female_pct)) +
+  geom_sf() +
+  scale_fill_viridis_c(option = "B", labels = scales::label_percent()) +
+  labs(fill = "Percent\nFemale Population") +
+  theme_void()
+
+```
+
+The following looks at the distribution of age across the counties in Iowa.
+```{r, results='hide',fig.keep='all'}
+# Add age-related variables to the list of variables
+vars <- c(
+  "B01001_001", # Total Population
+
+  # Age
+  "B01001_003", "B01001_004", "B01001_005", "B01001_006", "B01001_007", "B01001_027", "B01001_028", "B01001_029", "B01001_030", "B01001_031"
+)
+
+# Retrieve data with age-related variables
+counties <- get_acs(
+  geography = "county", state = "IA",
+  variables = vars, survey = "acs5",
+  output = "wide", geometry = TRUE
+) |>
+  mutate(
+    age_0_9_pct = (B01001_003E + B01001_004E + B01001_005E + B01001_006E + B01001_007E) / B01001_001E,
+    age_25_34_pct = (B01001_027E + B01001_028E + B01001_029E + B01001_030E + B01001_031E) / B01001_001E
+  ) |>
+  st_transform(
+    crs = 4326
+  )
+
+# Choropleth map for age 0-9 population percentage using ggplot
+ggplot(data = counties, aes(fill = age_0_9_pct)) +
+  geom_sf() +
+  scale_fill_viridis_c(option = "B", labels = scales::label_percent()) +
+  labs(fill = "Percent\nAge 0-9 Population") +
+  theme_void()
+
+# Choropleth map for age 25-34 population percentage using ggplot
+ggplot(data = counties, aes(fill = age_25_34_pct)) +
+  geom_sf() +
+  scale_fill_viridis_c(option = "B", labels = scales::label_percent()) +
+  labs(fill = "Percent\nAge 25-34 Population") +
+  theme_void()
+```
+
+
+
+## Exploring CGC_CFS_2018-2023 Data
+
+The following is from the geospatial_data.R example code file.
+```{r, echo=FALSE, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+# Read CFS data ----------------------------------------------------
+cfs <- read_rds("C:/Users/neham/Desktop/DS401/DS 401 Spring 2024/Source Data/CGC_CFS_2018-2023.rds")
+class(cfs)
+cfs_no_geo <- cfs |>
+  sf::st_drop_geometry() # Remove geometry from data
+
+class(cfs_no_geo)
+# No longer "sf" type, which can make it easier to manipulate if you aren't creating maps or doing geospatial operations
+
+# Get Place data ----------------------------------------------------------
+ia_places <- places(state = "IA", year = 2020) |>
+  st_transform(crs = 3417)
+
+# Add place data to CFS ----------------------------------------------------------
+cfs <- st_transform(cfs, crs = st_crs(ia_places))
+
+# st_join performs a "spatial join", adding place data to the CFS data for calls that are located within a city
+cfs_places <- st_join(cfs, ia_places)
+```
+```{r}
+mapview(ia_places) + mapview(cfs_places |> sample_n(10000), zcol = "NAME")
+```
+
+
+### Manipulating dataframe
+Grouped by jurisdiction and cfs_type, count the occurrences, for exploration.
+
+```{r}
+cfs_type_per_jurisdiction <- cfs %>%
+  group_by(jurisdiction, cfs_type) %>%
+  summarise(count = n())
+#View(cfs_type_per_jurisdiction)
+```
+
+Create a new column that categorizes 'Weekday' or 'Weekend'
+```{r}
+cfs <- cfs %>%
+  mutate(weekdays = ifelse(cfs_weekday %in% 2:6, "Weekday", "Weekend"))
+```
+
+
+### Summary stats for numerical variables
+```{r}
+summary(cfs[, c("cfs_year", "cfs_month", "cfs_hour", "cfs_minute")])
+
+# Descriptive Statistics
+# descriptive_stats <- cfs %>%
+#   summarize(
+#     Mean_cfs_year = mean(cfs_year),
+#     Median_cfs_year = median(cfs_year),
+#     Mode_cfs_year = as.numeric(names(table(cfs_year))[table(cfs_year) == max(table(cfs_year))]),
+#     Max_cfs_year = max(cfs_year),
+#     Min_cfs_year = min(cfs_year),
+#     Q1_cfs_year = quantile(cfs_year, 0.25),
+#     Q3_cfs_year = quantile(cfs_year, 0.75),
+#     SD_cfs_year = sd(cfs_year)
+#   )
+# print(descriptive_stats)
+
+```
+
+### Categorical variable exploration
+Identify the most frequent categories and jurisdiction called to
+```{r}
+# Count the occurrences of each jurisdiction
+jurisdiction_counts <- cfs %>%
+  group_by(jurisdiction) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+print(jurisdiction_counts)
+
+# Count the occurrences of each category
+category_counts <- cfs %>%
+  group_by(category) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+print(category_counts)
+```
+
+Want to see what falls under "Other"
+```{r}
+other_calls <- cfs %>%
+  filter(category == "Other")
+
+unique_cfs_types_other <- unique(other_calls$cfs_type)
+print(unique_cfs_types_other)
+
+```
+
+Looks like most of the data falls under Other
+```{r}
+# Count occurrences of each call type
+call_type_counts <- cfs %>%
+  group_by(category) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+ggplot(call_type_counts, aes(x = reorder(category, -count), y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Distribution of Call Types",
+       x = "Call Type",
+       y = "Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+### Trends
+This plot looks at the distribution of calls from the 3 different sources
+```{r}
+# Count occurrences of each call source
+call_source_counts <- cfs %>%
+  group_by(jurisdiction) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+ggplot(call_source_counts, aes(x = reorder(jurisdiction, -count), y = count)) +
+  geom_bar(stat = "identity", fill = "lightcoral") +
+  labs(title = "Distribution of Calls from Different Sources",
+       x = "Call Source",
+       y = "Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The plot looks more in depth of what types of calls are being made across the 3 sources.
+```{r}
+# Count occurrences of each call source and category
+call_source_category_counts <- cfs %>%
+  group_by(jurisdiction, category) %>%
+  summarise(count = n()) %>%
+  arrange(jurisdiction, desc(count))
+
+ggplot(call_source_category_counts, aes(x = reorder(jurisdiction, -count), y = count, fill = category)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Distribution of Calls from Different Sources by Category",
+       x = "Call Source",
+       y = "Count",
+       fill = "Call Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_viridis_d()
+```
+
+Excluding Other category, since a lot of the data is classified as "Other". Can look more closely at substance related categories 
+```{r, echo=FALSE, warning=FALSE}
+filtered_cfs <- cfs %>%
+  filter(category != "Other")
+
+call_source_category_counts <- filtered_cfs %>%
+  group_by(jurisdiction, category) %>%
+  summarise(count = n()) %>%
+  arrange(jurisdiction, desc(count))
+
+ggplot(call_source_category_counts, aes(x = reorder(jurisdiction, -count), y = count, fill = category)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Distribution of Calls from Different Sources by Category (Excluding 'Other')",
+       x = "Call Source",
+       y = "Count",
+       fill = "Call Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_viridis_d()  # Adjust the color scale as needed
+```
+
+
+This plot looks at the monthly distribution of calls by weekday
+```{r}
+ggplot(cfs, aes(x = cfs_month, fill = factor(cfs_weekday))) +
+  geom_bar(position = "stack") +
+  labs(title = "Monthly Distribution of Calls by Weekday",
+       x = "Month",
+       y = "Count",
+       fill = "Weekday") +
+  theme_minimal()
+```
+
+Similar plot looking at the distribution of calls by category and weekday
+```{r}
+ggplot(cfs, aes(x = weekdays, fill = category)) +
+  geom_bar(position = "stack") +
+  labs(title = "Distribution of Calls by Category and Weekday",
+       x = "Weekday",
+       y = "Count",
+       fill = "Category") +
+  theme_minimal()
+```
+
+Filter the categories column for substance-related categories. Plot that shows the distribution of substance-related calls by weekday.
+```{r}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories)
+
+ggplot(substance_cfs, aes(x = factor(cfs_weekday), fill = category)) +
+  geom_bar(position = "stack") +
+  labs(title = "Distribution of Substance-Related Calls by Weekday",
+       x = "Weekday",
+       y = "Count",
+       fill = "Category") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")) +
+  theme_minimal()
+```
+
+Distribute across the 3 PD's
+```{r}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories)
+
+# Create a plot with facets for each combination of weekday and call source
+ggplot(substance_cfs, aes(x = factor(cfs_weekday), fill = category)) +
+  geom_bar(position = "stack") +
+  facet_grid(. ~ jurisdiction) +
+  labs(title = "Distribution of Substance-Related Calls by Weekday and Call Source",
+       x = "Weekday",
+       y = "Count",
+       fill = "Category") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")) +
+  theme_minimal()
+```
+
+
+### Geospatial 
+Focused on the substance related categories
+```{r, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+ia_places <- places(state = "IA", year = 2020) |>
+  st_transform(crs = 3417)
+
+cfs <- st_transform(cfs, crs = st_crs(ia_places))
+cfs_places <- st_join(cfs, ia_places)
+
+# Filter substance-related calls
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs_places %>%
+  filter(category %in% substance_categories)
+```
+```{r}
+mapview(ia_places) + mapview(substance_cfs, zcol = "category")
+```
+

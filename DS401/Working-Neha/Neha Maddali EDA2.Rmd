@@ -1,0 +1,469 @@
+---
+title: "EDA Pt2"
+author: "Neha Maddali"
+date: "2024-02-25"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(dplyr)
+library(sf)
+library(tigris)
+library(mapview)
+library(tidycensus)
+library(leaflet)
+library(tmap)
+library(ggplot2)
+library(plotly)
+library(shiny)
+```
+
+```{r}
+cfs <- read_rds("C:/Users/neham/Desktop/DS401/DS 401 Spring 2024/Source Data/CGC_CFS_2018-2023.rds")
+```
+
+### Manipulating dataframe
+Grouped by jurisdiction and cfs_type, count the occurrences, for exploration.
+
+```{r}
+cfs_type_per_jurisdiction <- cfs %>%
+  group_by(jurisdiction, cfs_type) %>%
+  summarise(count = n())
+#View(cfs_type_per_jurisdiction)
+```
+
+Create a new column that categorizes 'Weekday' or 'Weekend'
+```{r}
+cfs <- cfs %>%
+  mutate(weekdays = ifelse(cfs_weekday %in% 2:6, "Weekday", "Weekend"))
+```
+
+
+### Trends
+Excluding Other category, since a lot of the data is classified as "Other". Can look more closely at substance related categories 
+```{r, echo=FALSE, warning=FALSE}
+filtered_cfs <- cfs %>%
+  filter(category != "Other")
+
+call_source_category_counts <- filtered_cfs %>%
+  group_by(jurisdiction, category) %>%
+  summarise(count = n()) %>%
+  arrange(jurisdiction, desc(count))
+
+ggplot(call_source_category_counts, aes(x = reorder(jurisdiction, -count), y = count, fill = category)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Distribution of Calls from Different Sources by Category (Excluding 'Other')",
+       x = "Call Source",
+       y = "Count",
+       fill = "Call Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_viridis_d()  # Adjust the color scale as needed
+```
+
+```{r}
+# Count occurrences of each call source
+call_source_counts <- cfs %>%
+  group_by(jurisdiction) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+ggplot(call_source_category_counts, aes(x = reorder(jurisdiction, -count), y = count / sum(count), fill = category)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Distribution of Calls from Different Sources by Category (Excluding 'Other')",
+       x = "Call Source",
+       y = "Percentage",
+       fill = "Call Category") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_viridis_d()  # Adjust the color scale as needed
+```
+
+
+This plot looks at the monthly distribution of calls by weekday
+```{r}
+ggplot(cfs, aes(x = cfs_month, fill = factor(cfs_weekday))) +
+  geom_bar(position = "stack") +
+  labs(title = "Monthly Distribution of Calls by Weekday",
+       x = "Month",
+       y = "Count",
+       fill = "Weekday") +
+  theme_minimal()
+```
+
+Similar plot looking at the distribution of calls by category and weekday
+```{r}
+ggplot(cfs, aes(x = weekdays, fill = category)) +
+  geom_bar(position = "stack") +
+  labs(title = "Distribution of Calls by Category and Weekday",
+       x = "Weekday",
+       y = "Count",
+       fill = "Category") +
+  theme_minimal()
+```
+
+Filter the categories column for substance-related categories. Plot that shows the distribution of substance-related calls by weekday.
+```{r}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories)
+
+ggplot(substance_cfs, aes(x = factor(cfs_weekday), fill = category)) +
+  geom_bar(position = "stack") +
+  labs(title = "Distribution of Substance-Related Calls by Weekday",
+       x = "Weekday",
+       y = "Count",
+       fill = "Category") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")) +
+  theme_minimal()
+```
+
+
+```{r}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories)
+
+substance_cfs_counts <- substance_cfs %>%
+  group_by(cfs_weekday, category) %>%
+  summarise(count = n()) %>%
+  arrange(cfs_weekday, desc(count))
+
+substance_cfs_percentages <- substance_cfs_counts %>%
+  group_by(cfs_weekday) %>%
+  mutate(percentage = count / sum(count) * 100)
+
+ggplot(substance_cfs_percentages, aes(x = factor(cfs_weekday), y = percentage, fill = category)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Distribution of Substance-Related Calls by Weekday",
+       x = "Weekday",
+       y = "Percentage",
+       fill = "Category") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_minimal()
+```
+
+
+Distribute across the 3 PD's
+```{r}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories)
+
+# Create a plot with facets for each combination of weekday and call source
+ggplot(substance_cfs, aes(x = factor(cfs_weekday), fill = category)) +
+  geom_bar(position = "stack") +
+  facet_grid(. ~ jurisdiction) +
+  labs(title = "Distribution of Substance-Related Calls by Weekday and Call Source",
+       x = "Weekday",
+       y = "Count",
+       fill = "Category") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")) +
+  theme_minimal()
+```
+
+```{r}
+substance_cfs_counts <- substance_cfs %>%
+  group_by(jurisdiction, cfs_weekday, category) %>%
+  summarise(count = n()) %>%
+  arrange(cfs_weekday, jurisdiction, desc(count))
+
+substance_cfs_proportions <- substance_cfs_counts %>%
+  group_by(jurisdiction, cfs_weekday) %>%
+  mutate(proportion = count / sum(count))
+
+ggplot(substance_cfs_proportions, aes(x = factor(cfs_weekday), y = proportion, fill = category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  facet_grid(. ~ jurisdiction) +
+  labs(title = "Distribution of Substance-Related Calls by Weekday and Call Source",
+       x = "Weekday",
+       y = "Proportion",
+       fill = "Category") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Time series
+```{r}
+cfs$cfs_date <- as.Date(cfs$cfs_date)
+
+cfs$year <- lubridate::year(cfs$cfs_date)
+cfs$month <- lubridate::month(cfs$cfs_date)
+
+# Create a time series plot for calls over months with lines for each year
+ggplot(cfs, aes(x = month, y = ..count.., group = year, color = as.factor(year))) +
+  geom_line(stat = "count", binwidth = 30) +  # Binwidth set to approximately one month
+  labs(title = "Calls Over Months by Year",
+       x = "Month",
+       y = "Number of Calls",
+       color = "Year") +
+  scale_x_continuous(breaks = 1:12, labels = month.abb) +  # Show month abbreviations on x-axis
+  theme_minimal()
+```
+
+```{r}
+ggplot(cfs, aes(x = cfs_hour, group = year, color = as.factor(year))) +
+  geom_freqpoly(binwidth = 1, size = 1) +  # Binwidth set to 1 hour
+  labs(title = "Calls Over Hours of the Day by Year",
+       x = "Hour of the Day",
+       y = "Number of Calls",
+       color = "Year") +
+  theme_minimal() +
+  scale_x_continuous(limits = c(1, 23), breaks = seq(1, 23, by = 1))
+
+```
+
+```{r}
+# Convert cfs_date to a Date object if it's not already
+cfs$cfs_date <- as.Date(cfs$cfs_date)
+
+# Extract year and month from cfs_date
+cfs$year <- lubridate::year(cfs$cfs_date)
+cfs$month <- lubridate::month(cfs$cfs_date)
+
+# Filter out "Other" category
+filtered_cfs <- cfs %>%
+  filter(!(category %in% c("Other", "Nuisance", "Health", "Blight", "Domestic")))
+
+# Create an interactive time series plot with animation and facets
+p <- ggplot(filtered_cfs, aes(x = cfs_hour, color = category, group = interaction(category, year))) +
+  geom_freqpoly(binwidth = 1, size = 1) +
+  labs(title = "Temporal Trends in Calls Over Hours of the Day by Category",
+       x = "Hour of the Day",
+       y = "Number of Calls",
+       color = "Category") +
+  theme_minimal() +
+  theme(legend.position = "top") +
+  facet_wrap(~year, scales = 'free_y', ncol = 2)
+
+# Convert ggplot to plotly with animation
+p <- ggplotly(p, animation_frame = ~year)
+p
+```
+
+### Spatial
+Across all years, substance related categories
+```{r}
+gb <- readRDS("C:/Users/neham/Desktop/DS401/DS 401 Spring 2024/Source Data/CGC_block_groups.rds")
+cfspre <- readRDS("C:/Users/neham/Desktop/DS401/DS 401 Spring 2024/Source Data/CGC_CFS_2018-2023.rds")
+grid <-readRDS("C:/Users/neham/Desktop/DS401/DS 401 Spring 2024/Source Data/CGC_grid.rds")
+cfs <- st_drop_geometry(cfspre)
+coordinates <- st_as_sf(cfs, coords = c("longitude", "latitude"), crs = 4326)
+
+
+# Filter substance-related calls
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories)
+
+# Create a spatial object for substance-related calls
+substance_coordinates <- st_as_sf(substance_cfs, coords = c("longitude", "latitude"), crs = 4326)
+
+# Count occurrences in grid squares
+substance_counts <- substance_coordinates %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  summarise(count = n())
+
+# Merge with grid data
+grid_substance <- left_join(grid, substance_counts, by = "grid_id")
+
+# Create map
+mapview(grid_substance, zcol = "count", legend = TRUE)
+```
+
+
+For year 2018
+```{r, echo=FALSE, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories, cfs_year == 2018)
+substance_coordinates <- st_as_sf(substance_cfs, coords = c("longitude", "latitude"), crs = 4326)
+
+substance_counts <- substance_coordinates %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  summarise(count = n())
+grid_substance <- left_join(grid, substance_counts, by = "grid_id")
+```
+```{r}
+mapview(grid_substance, zcol = "count", legend = TRUE)
+```
+
+For year 2019
+```{r, echo=FALSE, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories, cfs_year == 2019)
+substance_coordinates <- st_as_sf(substance_cfs, coords = c("longitude", "latitude"), crs = 4326)
+substance_counts <- substance_coordinates %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  summarise(count = n())
+grid_substance <- left_join(grid, substance_counts, by = "grid_id")
+```
+```{r}
+mapview(grid_substance, zcol = "count", legend = TRUE)
+```
+
+For year 2020
+```{r, echo=FALSE, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories, cfs_year == 2020)
+substance_coordinates <- st_as_sf(substance_cfs, coords = c("longitude", "latitude"), crs = 4326)
+substance_counts <- substance_coordinates %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  summarise(count = n())
+grid_substance <- left_join(grid, substance_counts, by = "grid_id")
+```
+```{r}
+mapview(grid_substance, zcol = "count", legend = TRUE)
+```
+
+For year 2021
+```{r, echo=FALSE, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories, cfs_year == 2021)
+substance_coordinates <- st_as_sf(substance_cfs, coords = c("longitude", "latitude"), crs = 4326)
+substance_counts <- substance_coordinates %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  summarise(count = n())
+grid_substance <- left_join(grid, substance_counts, by = "grid_id")
+```
+```{r}
+mapview(grid_substance, zcol = "count", legend = TRUE)
+```
+
+For year 2022
+```{r, echo=FALSE, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories, cfs_year == 2022)
+substance_coordinates <- st_as_sf(substance_cfs, coords = c("longitude", "latitude"), crs = 4326)
+substance_counts <- substance_coordinates %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  summarise(count = n())
+grid_substance <- left_join(grid, substance_counts, by = "grid_id")
+```
+```{r}
+mapview(grid_substance, zcol = "count", legend = TRUE)
+```
+
+For year 2023
+```{r, echo=FALSE, results='hide',error=FALSE, warning=FALSE, message=FALSE}
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>%
+  filter(category %in% substance_categories, cfs_year == 2023)
+substance_coordinates <- st_as_sf(substance_cfs, coords = c("longitude", "latitude"), crs = 4326)
+substance_counts <- substance_coordinates %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  summarise(count = n())
+grid_substance <- left_join(grid, substance_counts, by = "grid_id")
+```
+```{r}
+mapview(grid_substance, zcol = "count", legend = TRUE)
+```
+
+
+### R shiny
+```{r}
+cfs <- readRDS("C:/Users/neham/Desktop/DS401/DS 401 Spring 2024/Source Data/CGC_CFS_2018-2023.rds")
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>% filter(category %in% substance_categories)
+
+ui <- fluidPage(
+  titlePanel("Temporal and Spatial Interaction for Substance-Related Calls"),
+  sliderInput("hourSlider", "Select Hour:", min = 0, max = 23, value = 0, step = 1),
+  leafletOutput("map")
+)
+
+server <- function(input, output) {
+  # Filter data based on selected hour
+  filtered_data <- reactive({
+    substance_cfs %>%
+      filter(cfs_hour == input$hourSlider)
+  })
+
+  category_colors <- c("#66c2a5", "#fc8d62", "#8da0cb")
+
+  # Create map
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      addCircleMarkers(data = filtered_data(),
+                       ~longitude, ~latitude,
+                       popup = paste("Hour: ", input$hourSlider),
+                       label = ~category,
+                       color = ~factor(category, levels = substance_categories, labels = category_colors),
+                       fillOpacity = 0.8)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+```{r}
+# Load your data
+cfs <- readRDS("C:/Users/neham/Desktop/DS401/DS 401 Spring 2024/Source Data/CGC_CFS_2018-2023.rds")
+substance_categories <- c("Substance-On Premise", "Substance-Off Premise", "Substance-Driving")
+substance_cfs <- cfs %>% filter(category %in% substance_categories)
+
+# Define UI
+ui <- fluidPage(
+  titlePanel("Temporal and Spatial Interaction for Substance-Related Calls"),
+  sliderInput("yearSlider", "Select Year:", min = 2018, max = 2023, value = 2018, step = 1),
+  leafletOutput("map")
+)
+
+# Define server
+server <- function(input, output) {
+  # Filter data based on selected year
+  filtered_data <- reactive({
+    substance_cfs %>%
+      filter(cfs_year == input$yearSlider)
+  })
+
+  category_colors <- c("#66c2a5", "#fc8d62", "#8da0cb")
+
+
+  # Create map
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      addCircleMarkers(data = filtered_data(),
+                       ~longitude, ~latitude,
+                       popup = paste("Year: ", input$yearSlider),
+                       label = ~category,
+                       color = ~factor(category, levels = substance_categories, labels = category_colors),
+                       fillOpacity = 0.8)
+  })
+}
+
+# Run the application
+shinyApp(ui, server)
+```
+
+
+### Logistic Regression
+```{r}
+cfs$substance_related <- ifelse(cfs$category %in% substance_categories, 1, 0)
+
+logistic_model <- glm(substance_related ~ as.factor(cfs_weekday), data = cfs, family = "binomial")
+summary(logistic_model)
+
+odds_ratios <- exp(coef(logistic_model))
+odds_ratios
+```
